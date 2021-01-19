@@ -12,3 +12,8 @@ services:
           MYSQL_ROOT_HOST: '%'
         ports:
           - 3306:3306
+        volumes:
+          - guestbook_mariadb_data:/var/lib/mysql
+
+volumes:
+  guestbook_mariadb_data:
