@@ -16,4 +16,4 @@ services:
           - mariadb_data:/var/lib/mysql
 
 volumes:
-  mariadb_data:
+  guestbook_mariadb_data:
