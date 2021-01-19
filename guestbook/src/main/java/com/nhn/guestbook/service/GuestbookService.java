@@ -1,10 +1,14 @@
 package com.nhn.guestbook.service;
 
 import com.nhn.guestbook.dto.GuestbookDTO;
+import com.nhn.guestbook.dto.PageRequestDTO;
+import com.nhn.guestbook.dto.PageResultDTO;
 import com.nhn.guestbook.entity.Guestbook;
 
 public interface GuestbookService {
     Long register(GuestbookDTO dto);
+
+    PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO);
 
     default Guestbook dtoToEntity(GuestbookDTO dto) {
         return Guestbook.builder()
