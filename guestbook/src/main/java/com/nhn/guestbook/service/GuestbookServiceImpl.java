@@ -35,6 +35,25 @@ public class GuestbookServiceImpl implements GuestbookService {
         return entity.getGno();
     }
 
+    @Override
+    public void remove(Long gno) {
+        guestbookRepository.deleteById(gno);
+    }
+
+    @Override
+    public void modify(GuestbookDTO guestbookDTO) {
+        Optional<Guestbook> result = guestbookRepository.findById(guestbookDTO.getGno());
+
+        if (result.isPresent()) {
+            Guestbook guestbook = result.get();
+
+            guestbook.changeTitle(guestbookDTO.getTitle());
+            guestbook.changeContent(guestbookDTO.getContent());
+
+            guestbookRepository.save(guestbook);
+        }
+    }
+
     public PageResultDTO<GuestbookDTO, Guestbook> getList(PageRequestDTO requestDTO) {
         Pageable pageable = requestDTO.getPageable(Sort.by("gno").descending());
 
@@ -49,6 +68,6 @@ public class GuestbookServiceImpl implements GuestbookService {
     public GuestbookDTO read(Long gno) {
         Optional<Guestbook> guestbook = guestbookRepository.findById(gno);
 
-        return guestbook.isPresent() ? entityToDto(guestbook.get()) : null;
+        return guestbook.map(this::entityToDto).orElse(null);
     }
 }
