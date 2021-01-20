@@ -1,0 +1,19 @@
+version: "3.1"
+services:
+    test_mysql:
+        container_name: mreview_mariadb
+        image: mariadb
+        restart: always
+        environment:
+          MYSQL_DATABASE: mreview
+          MYSQL_USER: mreview
+          MYSQL_PASSWORD: mreview
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_HOST: '%'
+        ports:
+          - 3306:3306
+        volumes:
+          - mreview_mariadb_data:/var/lib/mysql
+
+volumes:
+  mreview_mariadb_data:
