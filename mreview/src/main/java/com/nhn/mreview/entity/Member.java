@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Getter
 @ToString
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mid;
