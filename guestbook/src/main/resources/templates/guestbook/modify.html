@@ -36,7 +36,7 @@
             </div>
         </form>
 
-        <button type="button" class="btn btn-primary">Modify</button>
+        <button type="button" class="btn btn-primary modifyBtn">Modify</button>
 
         <button type="button" class="btn btn-info">List</button>
 
@@ -48,6 +48,18 @@
             $(".removeBtn").click(function() {
                 actionForm
                     .attr("action", "/guestbook/remove")
+                    .attr("method", "post");
+
+                actionForm.submit();
+            });
+
+            $(".modifyBtn").click(function() {
+                if (!confirm("수정하시겠습니까?")) {
+                    return;
+                }
+
+                actionForm
+                    .attr("action", "/guestbook/modify")
                     .attr("method", "post");
 
                 actionForm.submit();
