@@ -2,6 +2,7 @@ package com.nhn.mreview.controller;
 
 import com.nhn.mreview.dto.UploadResultDTO;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,6 +56,13 @@ public class UploadController {
 
             try {
                 uploadFile.transferTo(savePath);
+
+                String thumbnailSaveName = Paths.get(uploadPath, folderPath, "s_" + uuid + "_" + filename).toString();
+
+                File thumbnailFile = new File(thumbnailSaveName);
+
+                Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+
                 uploadResultDTOList.add(new UploadResultDTO(filename, uuid, folderPath));
             } catch (IOException e) {
                 e.printStackTrace();

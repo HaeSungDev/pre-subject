@@ -3,6 +3,7 @@ package com.nhn.mreview.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,7 +19,18 @@ public class UploadResultDTO implements Serializable {
     public String getImageURL() {
         try {
             return URLEncoder.encode(
-                folderPath + "/" + uuid + "_" + filename, "UTF-8"
+                Paths.get(folderPath, uuid + "_" + filename).toString(), "UTF-8"
+            );
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public String getThumbnailURL() {
+        try {
+            return URLEncoder.encode(
+                    Paths.get(folderPath, "s_" + uuid + "_" + filename).toString(), "UTF-8"
             );
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
