@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query(
-        "select m, mi, avg(coalesce(r.grade, 0)), count(r) " +
+        "select m, mi, avg(coalesce(r.grade, 0)), count(distinct r) " +
             "from Movie m " +
             "left outer join MovieImage mi on mi.movie = m " +
             "left outer join Review r on r.movie = m group by m"
@@ -18,9 +18,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Page<Object[]> getListPage(Pageable pageable);
 
     @Query(
-        "select m, mi " +
-            "from Movie m left outer join MovieImage mi on mi.movie = m " +
-            "where m.mno = :mno"
+        "select m, mi, avg(coalesce(r.grade, 0)), count(distinct r) " +
+            "from Movie m " +
+            "left outer join MovieImage mi on mi.movie = m " +
+            "left outer join Review r on r.movie = m " +
+            "where m.mno = :mno group by m"
     )
     List<Object[]> getMovieWithAll(Long mno);
 }
