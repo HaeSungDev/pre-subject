@@ -22,7 +22,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "from Movie m " +
             "left outer join MovieImage mi on mi.movie = m " +
             "left outer join Review r on r.movie = m " +
-            "where m.mno = :mno group by m"
+            "where m.mno = :mno group by mi"
     )
     List<Object[]> getMovieWithAll(Long mno);
 }

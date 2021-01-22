@@ -18,7 +18,7 @@ public class ReviewRepositoryTests {
     @Test
     public void insertMovieReviews() {
         IntStream.rangeClosed(1, 200).forEach(i -> {
-            Long mno = (long)(Math.random() * 100) + 1;
+            Long mno = (long)(Math.random() * 98) + 3;
 
             Long mid = (long)(Math.random() * 100) + 1;
 
