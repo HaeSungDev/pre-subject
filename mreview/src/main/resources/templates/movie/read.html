@@ -25,7 +25,7 @@
         <div class="uploadResult">
             <ul>
                 <li th:each="movieImage: ${dto.imageDTOList}">
-                    <img th:if="${movieImage.path != null}" th:src="|/display?filename=${movieImage.getThumbnailURL()}|"
+                    <img th:if="${movieImage.path != null}" th:src="|/display?filename=${movieImage.getThumbnailURL()}|">
                 </li>
             </ul>
         </div>
@@ -34,10 +34,67 @@
             Review Count <span class="badge badge-light">[[${dto.reviewCnt}]]</span>
         </button>
 
-        <script>
-            $(document).ready(function(e) {
-            });
-        </script>
+        <button type="button" class="btn btn-info addReviewBtn">
+            Review Register
+        </button>
+
+        <div class="list-group reviewList">
+
+        </div>
+
+        <div class="reviewModal modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Movie Review</h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Reviewer ID</label>
+                            <input type="text" class="form-control" name="mid">
+                        </div>
+                        <div class="form-group">
+                            <label>Grade <span class="grade"></span></label>
+                            <div class="starrr"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Review Text</label>
+                            <input type="text" class="form-control" name="text" placeholder="Good Movie!">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary reviewSaveBtn">Save changes</button>
+                        <button type="button" class="btn btn-warning modifyBtn">Modify</button>
+                        <button type="button" class="btn btn-danger removeBtn">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="imageModal modal" tabindex="-2" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Picture</h5>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <style>
             .uploadResult {
@@ -65,6 +122,60 @@
                 width: 100px;
             }
         </style>
+
+        <script th:src="@{/starrr.js}"></script>
+        <link th:href="@{/css/starrr.css}" rel="stylesheet">
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+
+        <script>
+            $(document).ready(function(e) {
+                var grade = 0;
+                var mno = [[${dto.mno}]];
+
+                $(".starrr").starrr({
+                    rating: grade,
+                    change: function(e, value) {
+                        if (value) {
+                            console.log(value);
+                            grade = value;
+                        }
+                    }
+                });
+
+                var reviewModal = $(".reviewModal");
+                var inputMid = $('input[name="mid"]');
+                var inputText = $('input[name="text"]');
+
+                $(".addReviewBtn").click(function () {
+                    inputMid.val("");
+                    inputText.val("");
+
+                    $(".removeBtn, .modifyBtn").hide();
+                    $(".reviewSaveBtn").show();
+
+                    reviewModal.modal("show");
+                });
+
+                $(".reviewSaveBtn").click(function() {
+                    var data = { mno:mno, grade: grade, text: inputText.val(), mid: inputMid.val() };
+
+                    console.log(data);
+
+                    $.ajax({
+                        url: "/review/" + mno,
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "text",
+                        success: function(result) {
+                            console.log("result: " + result);
+                            self.location.reload();
+                        }
+                    });
+                    reviewModal.modal('hide');
+                });
+            });
+        </script>
 
     </th:block>
 
