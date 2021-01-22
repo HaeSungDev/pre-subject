@@ -88,7 +88,7 @@ public class UploadController {
     }
 
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFile(String filename) {
+    public ResponseEntity<byte[]> getFile(String filename, String size) {
         ResponseEntity<byte[]> result = null;
 
         try {
@@ -97,6 +97,10 @@ public class UploadController {
             log.info("filename: " + srcFilename);
 
             File file = new File(Paths.get(uploadPath, srcFilename).toString());
+
+            if (size != null && size.equals("1")) {
+                file = new File(file.getParent(), file.getName().substring(2));
+            }
 
             log.info("file: " + file);
 
